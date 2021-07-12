@@ -1,3 +1,3 @@
-module github.com/DMarby/jitter
+module github.com/gerifield/jitter
 
 go 1.12

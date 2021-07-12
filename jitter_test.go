@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/DMarby/jitter"
+	"github.com/gerifield/jitter"
 )
 
 func TestNewTicker(t *testing.T) {
