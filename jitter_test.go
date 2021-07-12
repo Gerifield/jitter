@@ -37,7 +37,7 @@ func TestInitialDelay(t *testing.T) {
 
 	start := time.Now()
 	<-ticker.C
-	if time.Now().Sub(start) < delay {
+	if time.Since(start) < delay {
 		t.Errorf("ticked too early")
 	}
 }
@@ -64,6 +64,7 @@ func TestJitter(t *testing.T) {
 		}
 	}
 
+	// Note: These conditions could and would sometimes fail!
 	if !ltHalf {
 		t.Errorf("No jitter less then half of max")
 	}
@@ -81,5 +82,18 @@ func Example() {
 
 	for tick := range t.C {
 		fmt.Println("Tick at", tick)
+	}
+}
+
+func TestStop(t *testing.T) {
+	delay := 200 * time.Millisecond
+
+	ticker := jitter.NewTicker(delay, delay)
+
+	start := time.Now()
+	ticker.Stop()
+
+	if time.Since(start) > delay {
+		t.Error("Stop took too long")
 	}
 }

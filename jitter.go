@@ -14,8 +14,8 @@ type Ticker struct {
 	interval time.Duration // Interval for the ticker to run at
 	jitter   time.Duration // Max jitter to add to the interval
 
-	stop   chan bool  // Channel used for stopping the timer
-	random *rand.Rand // Local random for generating jitter
+	stop   chan struct{} // Channel used for stopping the timer
+	random *rand.Rand    // Local random for generating jitter
 }
 
 // NewTicker returns a new ticker with the given interval and jitter
@@ -40,7 +40,7 @@ func NewTicker(interval time.Duration, jitter time.Duration) *Ticker {
 		interval: interval,
 		jitter:   jitter,
 
-		stop:   make(chan bool),
+		stop:   make(chan struct{}),
 		random: random,
 	}
 
@@ -71,7 +71,7 @@ func (t Ticker) sleep() {
 	time.Sleep(t.interval + delay)
 }
 
-// Stop will stop the ticker. It does not close the channel.
+// Stop will stop the ticker and return immediately
 func (t Ticker) Stop() {
-	t.stop <- true
+	close(t.stop)
 }
